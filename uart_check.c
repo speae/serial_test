@@ -37,7 +37,7 @@ typedef struct {
 	int fd;				/* file descriptor */
 } Settings_t;
 
-// <-- add_value
+// <-- add global value
 #define  FIFO_FROM_UART   "/tmp/from_uart_fifo"
 #define  FIFO_TO_UART     "/tmp/to_uart_fifo"
 #define  BUFF_SIZE   1024
@@ -59,7 +59,7 @@ int        key;
 Settings_t MySettings;
 long rxcount = 0;
 long txcount = 0;
-// --> add_value
+// --> add global value
 
 /*************************************************************/
 /* parse_args() - Parse command line arguments and set       */
@@ -434,7 +434,7 @@ void* tx_function(void *data)
 		if (testchar == 'q')
 		{
 			printf("system quit.");
-
+			exit(-1);
 		}
 		
 		if (key > 'Z') {
