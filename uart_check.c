@@ -355,7 +355,7 @@ int main_menu(void)
 }
 
 // <-- add_function
-void rx_function()
+void* rx_function(void *data)
 {
 	// Reset the serial device file descriptor for blocking read / write
 	fcntl(MySettings.fd, F_SETFL, 0);
@@ -397,7 +397,7 @@ void rx_function()
 	
 }
 
-void tx_function()
+void* tx_function(void *data)
 {
 	// Reset the serial device file descriptor for non-blocking read / write
 	fcntl(MySettings.fd, F_SETFL, O_NONBLOCK);
@@ -434,7 +434,7 @@ void tx_function()
 		if (testchar == 'q')
 		{
 			printf("system quit.");
-			
+
 		}
 		
 		if (key > 'Z') {
@@ -450,25 +450,25 @@ void tx_function()
 	}
 }
 
-void *t_function(void *data)
-{
-    int id;
-    int i = 0;
-    id = *((int *)data);
+// void *t_function(void *data)
+// {
+//     int id;
+//     int i = 0;
+//     id = *((int *)data);
 
-    //from uart
-    while(1)
-    {
-        /* ---- RX mode ---- */
-		if (MySettings.sermode == RX) {
-			rx_function();
-		}
-        /* ---- TX mode ---- */
-		else{
-			tx_function();
-		}
-	}
-}
+//     //from uart
+//     while(1)
+//     {
+//         /* ---- RX mode ---- */
+// 		if (MySettings.sermode == RX) {
+// 			rx_function();
+// 		}
+//         /* ---- TX mode ---- */
+// 		else{
+// 			tx_function();
+// 		}
+// 	}
+// }
 
 
 // --> add_function
@@ -537,8 +537,18 @@ int main(int argc, char *argv[])
 	
 
 	// --> add thread
-	if (MySettings.sermode) {
-		thr_id = pthread_create(&p_thread, NULL, t_function, (void *)&rx);
+	if (MySettings.sermode == RX) {
+		thr_id = pthread_create(&p_thread, NULL, rx_function, (void *)&rx);
+		if (thr_id < 0)
+		{
+			perror("thread create error : ");
+			exit(0);
+		}
+		printf("flag = %d\n", MySettings.sermode);
+	}
+
+	if (MySettings.sermode == TX) {
+		thr_id = pthread_create(&p_thread, NULL, tx_function, (void *)&tx);
 		if (thr_id < 0)
 		{
 			perror("thread create error : ");
@@ -548,6 +558,7 @@ int main(int argc, char *argv[])
 	}
 
 	pthread_join(p_thread, (void*)&rx);
+	pthread_join(p_thread, (void*)&tx);
 
 	// /* ---- RX mode ---- */
 	// if (MySettings.sermode == RX) {
