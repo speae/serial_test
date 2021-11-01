@@ -1,8 +1,17 @@
 import time
 import serial
+import threading 
 
-print("UART Demonstration Program")
-print("NVIDIA Jetson Nano Developer Kit")
+class ThreadWork(threading.Thread):
+    def __init__(self, name):
+        super.__init__()
+        self.name = name
+
+    def run(self):
+        print("UART Demonstration Program", threading.currentThread().getName())
+        time.sleep(1)
+        print("NVIDIA Jetson Nano Developer Kit", threading.currentThread().getName())
+
 
 serial_port = serial.Serial(
     port="/dev/ttyTHS1",

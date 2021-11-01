@@ -57,24 +57,32 @@ class Uart_remote{
 				string TO_UART;
 			};
 		#else
-			const char* optString = "vd:b:rt";
-			char buff[BUFF_SIZE];
-			int counter = 0;
+			const char* optString;
+			// char* buff;
+			int counter;
 			int fd_from_uart;
 			int fd_to_uart;
 			int handle;
 			int port_check;
 			int port_cfg_chk;
-
-			string TitleMessage  = "Welcome Serial Port\r\n";
-			char Buff[256];
-			int RxCount;
-			int loop;
-			int ending;    
-			
 		#endif
 		
 	public:
+		// default constructor
+		Uart_remote(){
+			const char* optString = "vd:b:rt";
+			// char* buff = new char[BUFF_SIZE];
+			int counter = 0;
+			int fd_from_uart = 0;
+			int fd_to_uart = 0;
+			int handle = 0;
+			int port_check = 0;
+			int port_cfg_chk = 0;
+		}
+		// destructor
+		// ~Uart_remote(){
+		// 	delete[] buff;
+		// }
 		long rxcount = 0;
 		long txcount = 0;
 		
@@ -94,9 +102,9 @@ class Uart_remote{
 			Uart_control uart_c;
 
 			void set_openport(Settings_t*);
-			int get_openport();
+			int get_openport(){return port_check;};
 			void set_configureport(Settings_t*);
-			int get_configureport();
+			int get_configureport(){return port_cfg_chk;};
 			void parse_args(int, char**, Settings_t*);
 			
 			/*************************************************************/
@@ -285,11 +293,6 @@ void Uart_remote::set_openport(Settings_t *settings)
     port_check = 0;
 }
 
-int Uart_remote::get_openport()
-{
-    return port_check;
-}
-
 /*************************************************************/
 /* configureport() - configures the selected serial port     */
 /*************************************************************/
@@ -401,10 +404,6 @@ void Uart_remote::set_configureport(Settings_t *settings)
     	cout << "Configured serial device file descriptor for 8n1 and no flow control: " << settings->devpath << endl;
     }
     port_cfg_chk = 0;
-}
-
-int Uart_remote::get_configureport(){
-	return port_cfg_chk;
 }
 
 // --> add function
