@@ -7,6 +7,7 @@
 #include "uart_ex.hpp"
 // --> move to uart_check.hpp file
 
+// <-- Seperate header file and main cpp file
 // #include <stdlib.h>
 // #include <string.h>
 // #include <inttypes.h>
@@ -407,6 +408,7 @@
 // int Uart_remote::get_configureport(){
 // 	return port_cfg_chk;
 // }
+// --> Seperate header file and main cpp file
 
 void rx_function(Settings_t* settings)
 {
