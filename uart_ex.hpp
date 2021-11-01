@@ -36,6 +36,15 @@
 #define BUFF_SIZE 1024
 
 using namespace std;
+
+struct Settings_t{
+	int verbose;			/* enable verbose output */
+	char devpath[DEVLENGTH];	/* -d serial device */
+	int baudrate;			/* baudrate to use */
+	int sermode;			/* serial mode RX or TX */
+	int fd;				/* file descriptor */
+};
+Settings_t MySettings;
 // --> add constant
 
 class Uart_remote{
@@ -73,15 +82,6 @@ class Uart_remote{
 		#define UART_FIFO
 			void set_fifo_protocol(struct fifo_file* fifo);
 		#else
-			struct Settings_t{
-				int verbose;			/* enable verbose output */
-				char devpath[DEVLENGTH];	/* -d serial device */
-				int baudrate;			/* baudrate to use */
-				int sermode;			/* serial mode RX or TX */
-				int fd;				/* file descriptor */
-			};
-			Settings_t MySettings;
-
 			// <-- add global value
 			struct Uart_control
 			{
